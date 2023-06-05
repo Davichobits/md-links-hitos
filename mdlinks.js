@@ -21,39 +21,32 @@ const mdLinks = (userPath) => {
     fsPromises.access(userPathAbsolute)
     .then(() => fs.promises.stat(userPathAbsolute)) // Devuelve si la ruta es una archivo
     .then(stats => {
-      if(stats.isFile()){
+      if(stats.isFile() && path.extname(userPathAbsolute) === '.md'){
+        // Leer los links de el archivo
+        fs.readFile(userPathAbsolute, 'utf8', (err, data) => {
+          if (err) {
+            console.error(err)
+            return
+          }
+          // Busca los enlaces utilizando la expresión regular
+          const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+          const links = [];
+          let match;
+          while ((match = linkRegex.exec(data)) !== null) {
+            const text = match[1];
+            const url = match[2];
+            links.push({ text, url });
+          }
 
-        if( path.extname(userPathAbsolute) === '.md'){
-          // Leer los links de el archivo
-          fs.readFile(userPathAbsolute, 'utf8', (err, data) => {
-            if (err) {
-              console.error(err)
-              return
-            }
-            // Busca los enlaces utilizando la expresión regular
-            const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-            const links = [];
-            let match;
-            while ((match = linkRegex.exec(data)) !== null) {
-              const text = match[1];
-              const url = match[2];
-              links.push({ text, url });
-            }
-
-            // Imprime los enlaces encontrados
-            resolve(links);
-          })
-
-
-        }
+          // Imprime los enlaces encontrados
+          resolve(links);
+        })
         
-
       }else{
-        console.log('Es una carpeta')
+        reject('Es una carpeta')
       }
     })
-    .catch(error => console.log(error))
-
+    .catch(error => reject(error))
   });
 }
 
