@@ -37,11 +37,7 @@ const mdLinks = (userPath) => {
         reject('Es una carpeta')
       }
     })
-<<<<<<< HEAD
     .catch(error => reject(error))
-=======
-    .catch(error => console.log(error))
->>>>>>> hito1
   });
 }
 
