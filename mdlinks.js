@@ -2,6 +2,8 @@ const path = require('path');
 const fs = require('fs');
 const fsPromises = require('fs/promises');
 
+const { foundLinks } = require('./functions.js');
+
 const mdLinks = (userPath) => {
   return new Promise((resolve, reject) => {
     
@@ -28,25 +30,18 @@ const mdLinks = (userPath) => {
             console.error(err)
             return
           }
-          // Busca los enlaces utilizando la expresión regular
-          const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-          const links = [];
-          let match;
-          while ((match = linkRegex.exec(data)) !== null) {
-            const text = match[1];
-            const url = match[2];
-            links.push({ text, url });
-          }
-
-          // Imprime los enlaces encontrados
-          resolve(links);
+          // devuelve los enlaces encontrados
+          resolve(foundLinks(data));
         })
-        
       }else{
         reject('Es una carpeta')
       }
     })
+<<<<<<< HEAD
     .catch(error => reject(error))
+=======
+    .catch(error => console.log(error))
+>>>>>>> hito1
   });
 }
 
