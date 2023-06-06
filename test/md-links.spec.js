@@ -9,6 +9,7 @@ describe('test for the mdLinks function', () => {
 
   it('should return an error if the path doesnt exist', () => {
     expect(()=> mdLinks()).rejects.toThrowError('El path no fue proporcionado.');
+
   });
 
   it('should return an array of links', () => {
@@ -19,5 +20,9 @@ describe('test for the mdLinks function', () => {
     return mdLinks('./folder/archivo.md').then(data => {
       expect(data).toEqual(output)
     })
+  });
+
+  it('should resolve a promise', () => {
+    expect(mdLinks('./folder/archivo.md')).toBeInstanceOf(Promise);
   });
 });

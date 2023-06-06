@@ -1,6 +1,11 @@
 const fs = require('fs');
 
 const foundLinks = (data) => {
+
+  if(typeof data !== 'string'){
+    throw new Error('La Data no es correcta');
+  }
+
   const links = [];
   const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
   let match;
