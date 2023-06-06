@@ -30,8 +30,12 @@ const mdLinks = (userPath) => {
             console.error(err)
             return
           }
-          // devuelve los enlaces encontrados
-          resolve(foundLinks(data));
+          
+          const linksArray = foundLinks(data); // return text and url
+          linksArray.forEach(link => {
+            link.file = userPathAbsolute;
+          });
+          resolve(linksArray);
         })
       }else{
         reject('Es una carpeta')
