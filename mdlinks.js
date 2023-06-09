@@ -21,8 +21,7 @@ const mdLinks = (userPath, validate) => {
     }
 
     // Comprobar si la ruta existe en el computador
-    fsPromises
-    .access(userPathAbsolute)
+    fsPromises.access(userPathAbsolute) // Devuelve nada si se puede acceder a un archivo o directorio
     .then(() => fs.promises.stat(userPathAbsolute)) // Devuelve si la ruta es una archivo
     .then(stats => {
       if(stats.isFile() && path.extname(userPathAbsolute) === '.md'){
@@ -32,35 +31,8 @@ const mdLinks = (userPath, validate) => {
             reject(error)
             return
           }
-
-          const linksArray = foundLinks(data); // return text and url
-
-          if(validate){
-            const newLinks = linksArray.map(link => {
-              return new Promise((resolve, reject) => {
-                validateLink(link.url)
-                .then((response) => {
-                  link.file = userPathAbsolute;
-                  link.status = response.status;
-                  link.ok = response.ok;
-                  resolve(link)
-                })
-                .catch((error) => {
-                  reject(error)
-                });
-              });
-            });
-
-            Promise.all(newLinks)
-            .then((values) => resolve(values))
-            .catch((error) => reject(error));
-
-          }else{
-            linksArray.forEach(link => {
-              link.file = userPathAbsolute;
-            });
-            resolve(linksArray);
-          }          
+          const linksArray = foundLinks(data, userPath); // return text and url
+          resolve(linksArray);
         })
       }else{
         reject(new Error('Es una carpeta'))
