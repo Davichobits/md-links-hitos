@@ -1,6 +1,7 @@
-const { foundLinks } = require("../functions")
+const { foundLinks, validateLink } = require("../functions")
 
 describe('test for the foundLinks function', () => {
+
   it('should be a function', () => {
     expect(typeof foundLinks).toBe('function');
   });
@@ -16,5 +17,13 @@ describe('test for the foundLinks function', () => {
     [Node.js](https://nodejs.org/)`
     expect(Array.isArray(foundLinks(data))).toBe(true);
   });
+
+});
+
+describe('test for the validateLink function', () => {
+
+  it('should be a function', ()=>{
+    expect(typeof validateLink).toBe('function');
+  })
 
 });
