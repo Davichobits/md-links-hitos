@@ -21,6 +21,9 @@ const foundLinks = (data, actualFile) => {
 }
 
 const validateLink = (link)=>{
+  if(typeof link !== 'string'){
+    throw new Error('link no valido');
+  }
   return axios.get(link)
     .then((response) => {
       return {

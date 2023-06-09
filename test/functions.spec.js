@@ -1,3 +1,4 @@
+const axios = require('axios');
 const { foundLinks, validateLink } = require("../functions")
 
 describe('test for the foundLinks function', () => {
@@ -20,10 +21,37 @@ describe('test for the foundLinks function', () => {
 
 });
 
+jest.mock('axios');
+
 describe('test for the validateLink function', () => {
 
   it('should be a function', ()=>{
     expect(typeof validateLink).toBe('function');
   })
+
+  it('should throw and error if the input is not a string', ()=>{
+    expect(()=>validateLink(123)).toThrowError('link no valido');
+  })
+
+  afterEach(()=>{
+    jest.clearAllMocks();
+  });
+
+  it('should return a correct answer when the link is valid', ()=>{
+    const mockResponse = {
+      status: 200,
+      statusText: 'OK'
+    }
+    axios.get.mockResolvedValue(mockResponse)
+    const link = 'https://www.google.com'
+    return validateLink(link)
+    .then(res=>{
+      expect(axios.get).toHaveBeenCalledWith(link);
+      expect(res).toEqual({
+        status: mockResponse.status,
+        ok: mockResponse.statusText,
+      });
+    });
+  });
 
 });
