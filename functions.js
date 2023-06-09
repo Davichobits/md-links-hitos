@@ -1,4 +1,5 @@
 const fs = require('fs');
+const axios = require('axios');
 
 const foundLinks = (data) => {
 
@@ -17,7 +18,21 @@ const foundLinks = (data) => {
   return links;
 }
 
+const validateLink = (link)=>{
+  return axios.get(link)
+    .then((response) => {
+      return {
+        status: response.status,
+        ok: response.statusText,
+      };
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
 module.exports = {
   foundLinks,
+  validateLink
 };
 

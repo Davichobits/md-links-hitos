@@ -2,9 +2,9 @@ const path = require('path');
 const fs = require('fs');
 const fsPromises = require('fs/promises');
 
-const { foundLinks } = require('./functions.js');
+const { foundLinks, validateLink } = require('./functions.js');
 
-const mdLinks = (userPath) => {
+const mdLinks = (userPath, validate) => {
   return new Promise((resolve, reject) => {
     
     // Comprobar que se haya pasado una ruta
@@ -30,12 +30,37 @@ const mdLinks = (userPath) => {
             console.error(err)
             return
           }
-          
           const linksArray = foundLinks(data); // return text and url
-          linksArray.forEach(link => {
-            link.file = userPathAbsolute;
-          });
-          resolve(linksArray);
+          if(validate){
+
+            const newLinks = linksArray.map(link => {
+              return new Promise((resolve, reject) => {
+                validateLink(link.url)
+                .then((response) => {
+                  link.file = userPathAbsolute;
+                  link.status = response.status;
+                  link.ok = response.ok;
+                  
+                  resolve(link)
+                })
+                .catch((error) => {
+                  reject(error)
+                });
+              });
+            });
+            (Promise.all(newLinks).then((values) => {
+              resolve(values)
+            }).catch((error) => {}));
+
+          }else{
+            linksArray.forEach(link => {
+              link.file = userPathAbsolute;
+            });
+            resolve(linksArray);
+          }
+          
+
+          
         })
       }else{
         reject('Es una carpeta')
