@@ -17,12 +17,12 @@ describe('test for the mdLinks function', () => {
       {
         text: 'Markdown',
         url: 'https://es.wikipedia.org/wiki/Markdown',
-        file: 'D:\\Laboratoria\\Proyectos estudiantes\\md-links-hitos\\folder\\archivo.md'
+        file: './folder/archivo.md'
       },
       {
         text: 'Node.js',
         url: 'https://nodejs.org/',
-        file: 'D:\\Laboratoria\\Proyectos estudiantes\\md-links-hitos\\folder\\archivo.md'
+        file: './folder/archivo.md'
       }
     ]
     return mdLinks('./folder/archivo.md').then(data => {

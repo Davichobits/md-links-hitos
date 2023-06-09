@@ -20,7 +20,7 @@ const mdLinks = (userPath) => {
     }
 
     // Comprobar si la ruta existe en el computador
-    fsPromises.access(userPathAbsolute)
+    fsPromises.access(userPathAbsolute) // Devuelve nada si se puede acceder a un archivo o directorio
     .then(() => fs.promises.stat(userPathAbsolute)) // Devuelve si la ruta es una archivo
     .then(stats => {
       if(stats.isFile() && path.extname(userPathAbsolute) === '.md'){
@@ -30,11 +30,7 @@ const mdLinks = (userPath) => {
             console.error(err)
             return
           }
-          
-          const linksArray = foundLinks(data); // return text and url
-          linksArray.forEach(link => {
-            link.file = userPathAbsolute;
-          });
+          const linksArray = foundLinks(data, userPath); // return text and url
           resolve(linksArray);
         })
       }else{

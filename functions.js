@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const foundLinks = (data) => {
+const foundLinks = (data, actualFile) => {
 
   if(typeof data !== 'string'){
     throw new Error('La Data no es correcta');
@@ -10,9 +10,11 @@ const foundLinks = (data) => {
   const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
   let match;
   while ((match = linkRegex.exec(data)) !== null) {
-    const text = match[1];
-    const url = match[2];
-    links.push({ text, url });
+    links.push({ 
+      text: match[1],
+      url: match[2],
+      file: actualFile
+    });
   }
   return links;
 }
